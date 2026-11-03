@@ -2,6 +2,18 @@
 
 Local, free Thai + English text-to-speech with voice cloning, tone/softness controls, a web GUI and an MCP server. Runs on Apple Silicon (MPS) or CPU. No auth — the worker binds to `127.0.0.1` only.
 
+## Web GUI
+
+`uv run tts web` opens five tabs: generate, voice library (upload or record a reference clip), convert a recording into another voice, history (play, download, delete one, selected or all) and settings.
+
+| Generate | Voice library | History |
+|---|---|---|
+| <img src="docs/screenshots/generate.png" width="260" alt="Generate tab"> | <img src="docs/screenshots/voices.png" width="260" alt="Voice library tab"> | <img src="docs/screenshots/history.png" width="260" alt="History tab"> |
+
+| Convert | Settings |
+|---|---|
+| <img src="docs/screenshots/convert.png" width="260" alt="Convert tab"> | <img src="docs/screenshots/settings.png" width="260" alt="Settings tab"> |
+
 ## Setup
 
 ```bash
