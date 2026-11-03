@@ -20,12 +20,12 @@ Models download on first use into the Hugging Face cache (Thai TTS ~1.3 GB, Thai
 | Status / stop | `uv run tts status`, `uv run tts stop` |
 | Keep the worker up | `uv run tts serve` |
 
-A reference clip should be 5–15 s of clean speech by one speaker. Leave `--text` out to transcribe it automatically.
+A reference clip should be 5–15 s of clean speech by one speaker, recorded at 24 kHz or higher. Leave `--text` out to transcribe it automatically. Clips under ~4 s or at 16 kHz tend to repeat words or leak the reference text into the output.
 
 ## MCP
 
 ```bash
-claude mcp add tts -- uv run --directory /Users/lek/WORK/PROJECT/Create2TTS tts-mcp
+claude mcp add -s user tts -- uv run --directory /path/to/Create2TTS tts-mcp
 ```
 
 Tools: `list_voices`, `list_presets`, `synthesize`, `clone_voice`, `convert_voice`, `delete_voice`, `open_gui`, `tts_status`, `free_memory`. `synthesize` returns the absolute `path` of the audio file.
