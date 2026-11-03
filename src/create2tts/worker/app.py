@@ -16,6 +16,7 @@ from fastapi.staticfiles import StaticFiles
 
 from .. import config
 from ..models import (
+    OutputFiles,
     Preset,
     SynthRequest,
     SynthResult,
@@ -176,6 +177,14 @@ def create_app(
     def delete_output(file: str) -> Response:
         service.delete_output(_output_path(file).name)
         return Response(status_code=204)
+
+    @app.post("/api/outputs/delete")
+    def delete_outputs(body: OutputFiles) -> dict[str, int]:
+        return {"deleted": service.delete_outputs(body.files)}
+
+    @app.delete("/api/outputs")
+    def clear_outputs() -> dict[str, int]:
+        return {"deleted": service.clear_outputs()}
 
     @app.get("/api/presets")
     def list_presets() -> list[Preset]:

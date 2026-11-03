@@ -59,6 +59,9 @@ export const api = {
 
   outputs: (limit = 100) => call<SynthResult[]>(`/api/outputs?limit=${limit}`).then((r) => r.data),
   deleteOutput: (file: string) => call<void>(`/api/outputs/${file}`, { method: "DELETE" }),
+  deleteOutputs: (files: string[]) =>
+    call<{ deleted: number }>("/api/outputs/delete", json("POST", { files })).then((r) => r.data),
+  clearOutputs: () => call<{ deleted: number }>("/api/outputs", { method: "DELETE" }).then((r) => r.data),
 
   presets: () => call<Preset[]>("/api/presets").then((r) => r.data),
   putPreset: (p: Preset) => call<Preset>(`/api/presets/${p.name}`, json("PUT", p)).then((r) => r.data),

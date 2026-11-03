@@ -61,6 +61,10 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); ou
 input[type="range"] { padding: 0; accent-color: var(--accent); }
 input[type="checkbox"] { width: auto; }
 .check { display: flex; align-items: center; gap: 6px; padding-top: 22px; white-space: nowrap; }
+.pick { width: 18px; height: 18px; margin: 0; flex: none; accent-color: var(--accent); cursor: pointer; }
+.row.start { align-items: flex-start; }
+.row.start .pick { margin-top: 0.45em; }
+.card.picked { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 
 .row { display: flex; gap: 8px; align-items: center; }
 .row.wrap { flex-wrap: wrap; }

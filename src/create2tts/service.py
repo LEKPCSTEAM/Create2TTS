@@ -139,6 +139,25 @@ class TTSService:
         target.unlink()
         target.with_suffix(".json").unlink(missing_ok=True)
 
+    def delete_outputs(self, files: list[str]) -> int:
+        deleted = 0
+        for file in files:
+            try:
+                self.delete_output(file)
+            except KeyError:
+                continue
+            deleted += 1
+        return deleted
+
+    def clear_outputs(self) -> int:
+        # Audio without a sidecar is still being written; leave it.
+        metas = list(self.outputs.glob("*.json"))
+        for meta in metas:
+            for audio in (meta.with_suffix(".wav"), meta.with_suffix(".mp3")):
+                audio.unlink(missing_ok=True)
+            meta.unlink(missing_ok=True)
+        return len(metas)
+
     class _Work:
         def __init__(self, svc: "TTSService"):
             self.svc = svc

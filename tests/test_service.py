@@ -161,3 +161,23 @@ def test_delete_output(env):
             svc.delete_output(bad)
     svc.delete_output(r.file)
     assert not list(svc.outputs.iterdir())
+
+
+def test_delete_outputs_skips_unknown(env):
+    svc, _, _, ref = env
+    v = _thai_voice(svc, ref)
+    a = svc.synthesize(SynthRequest(text="สวัสดีครับ", voice=v.id))
+    b = svc.synthesize(SynthRequest(text="ลาก่อนครับ", voice=v.id))
+    assert svc.delete_outputs([a.file, "../x.wav", "missing.wav", a.file]) == 1
+    assert svc.list_outputs() == [b]
+
+
+def test_clear_outputs_keeps_unfinished_audio(env):
+    svc, _, _, ref = env
+    v = _thai_voice(svc, ref)
+    for text in ("สวัสดีครับ", "ลาก่อนครับ"):
+        svc.synthesize(SynthRequest(text=text, voice=v.id))
+    pending = svc.outputs / "20990101-000000-abcdef.wav"
+    pending.write_bytes(b"x")
+    assert svc.clear_outputs() == 2
+    assert list(svc.outputs.iterdir()) == [pending]

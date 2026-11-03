@@ -64,6 +64,10 @@ class SynthResult(BaseModel):
     transcript: str | None = None
 
 
+class OutputFiles(BaseModel):
+    files: list[str] = Field(min_length=1, max_length=1000)
+
+
 class TranscribeResult(BaseModel):
     text: str
     language: Language

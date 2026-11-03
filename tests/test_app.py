@@ -105,6 +105,14 @@ class FakeService:
         if file != "a.wav":
             raise KeyError(file)
 
+    def delete_outputs(self, files):
+        self.calls.append(("delete_outputs", files))
+        return len(files)
+
+    def clear_outputs(self):
+        self.calls.append(("clear_outputs",))
+        return 3
+
     def loaded_engines(self):
         return ["thonburian"]
 
@@ -258,6 +266,17 @@ def test_outputs(env, make_wav):
     assert client.get("/api/outputs/missing.wav").status_code == 404
     assert client.delete("/api/outputs/a.wav").status_code == 204
     assert client.delete("/api/outputs/b.wav").status_code == 404
+
+
+def test_bulk_delete_outputs(env):
+    client, service, *_ = env
+    r = client.post("/api/outputs/delete", json={"files": ["a.wav", "b.mp3"]})
+    assert r.status_code == 200 and r.json() == {"deleted": 2}
+    assert service.calls[-1] == ("delete_outputs", ["a.wav", "b.mp3"])
+    assert client.post("/api/outputs/delete", json={"files": []}).status_code == 422
+    r = client.delete("/api/outputs")
+    assert r.status_code == 200 and r.json() == {"deleted": 3}
+    assert service.calls[-1] == ("clear_outputs",)
 
 
 def test_outputs_path_traversal_is_404(env):
