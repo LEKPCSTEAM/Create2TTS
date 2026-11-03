@@ -24,7 +24,11 @@ def load_audio(path: Path, sr: int = 24000) -> np.ndarray:
 def trim_silence(
     wav: np.ndarray, sr: int, threshold_db: float = -40, keep_ms: int = 100
 ) -> np.ndarray:
-    loud = np.flatnonzero(np.abs(wav) > 10 ** (threshold_db / 20))
+    peak = float(np.abs(wav).max()) if wav.size else 0.0
+    if peak == 0.0:
+        return wav[:0]
+    # threshold is relative to the clip peak, so quiet mics still pass
+    loud = np.flatnonzero(np.abs(wav) > peak * 10 ** (threshold_db / 20))
     if loud.size == 0:
         return wav[:0]
     keep = int(sr * keep_ms / 1000)

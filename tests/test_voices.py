@@ -19,6 +19,20 @@ def test_create_and_dedupe(lib, tmp_path, make_wav):
     assert [x.id for x in lib.list()] == ["nok", "nok-2"]
 
 
+def test_quiet_clip_accepted_and_normalized(lib, tmp_path):
+    import numpy as np
+    import soundfile as sf
+
+    sr = 24000
+    quiet = 10 ** (-45 / 20)
+    tone = quiet * np.sin(2 * np.pi * 220 * np.arange(5 * sr) / sr)
+    sf.write(tmp_path / "quiet.wav", tone.astype(np.float32), sr)
+    v = lib.create("quiet", tmp_path / "quiet.wav", "t", "th")
+    assert v.duration_s >= 4.9
+    saved, _ = sf.read(lib.ref_path(v.id))
+    assert np.abs(saved).max() > 0.5
+
+
 def test_short_clip_rejected(lib, tmp_path, make_wav):
     with pytest.raises(ValueError, match="2 s"):
         lib.create("x", make_wav(tmp_path / "a.wav", 1), "t", "th")

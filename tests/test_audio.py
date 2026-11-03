@@ -36,6 +36,23 @@ def test_trim_silence_removes_edges():
     assert len(out) >= SR
 
 
+def test_trim_silence_keeps_quiet_recording():
+    quiet = 10 ** (-45 / 20)
+    tone = (quiet * np.sin(2 * np.pi * 220 * np.arange(SR) / SR)).astype(np.float32)
+    wav = np.concatenate([np.zeros(SR, np.float32), tone, np.zeros(SR, np.float32)])
+    out = audio.trim_silence(wav, SR)
+    assert SR <= len(out) < 1.5 * SR
+
+
+def test_trim_silence_keeps_soft_trailing_words():
+    t = np.arange(SR) / SR
+    loud = (0.3 * np.sin(2 * np.pi * 220 * t)).astype(np.float32)
+    soft = (0.006 * np.sin(2 * np.pi * 220 * t)).astype(np.float32)  # below -40 dBFS, 34 dB under loud
+    wav = np.concatenate([loud, soft, np.zeros(SR, np.float32)])
+    out = audio.trim_silence(wav, SR)
+    assert len(out) >= 2 * SR
+
+
 def test_concat_segments_length():
     part = np.ones(SR, np.float32)
     out = audio.concat_segments([part, part], SR, gap_ms=180)

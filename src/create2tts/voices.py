@@ -3,6 +3,7 @@ import shutil
 from datetime import datetime
 from pathlib import Path
 
+import numpy as np
 from pythainlp.transliterate import romanize
 
 from .audio import load_audio, save_wav, trim_silence
@@ -12,6 +13,7 @@ ID_RE = re.compile(r"^[a-z0-9_-]{1,48}$")
 SR = 24000
 MIN_S = 2.0
 MAX_S = 15.0
+REF_PEAK = 0.9
 
 
 def _slug(name: str) -> str:
@@ -65,6 +67,7 @@ class VoiceLibrary:
         if len(wav) < MIN_S * SR:
             raise ValueError("reference audio must be at least 2 s of speech")
         wav = wav[: int(MAX_S * SR)]
+        wav = wav * (REF_PEAK / float(np.abs(wav).max()))
         folder = self._claim_folder(_slug(name))
         try:
             save_wav(folder / "ref.wav", wav, SR)
