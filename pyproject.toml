@@ -1,0 +1,40 @@
+[project]
+name = "create2tts"
+version = "0.1.0"
+description = "Local Thai/English TTS with voice cloning, a web GUI and an MCP server"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "python-multipart>=0.0.9",
+    "httpx>=0.27",
+    "mcp>=1.9",
+    "numpy",
+    "soundfile>=0.12",
+    "pedalboard>=0.9",
+    "pythainlp>=5.0",
+    "torch>=2.4",
+    "torchaudio>=2.4",
+    "transformers",
+    "f5-tts>=1.1.22",
+    "cached-path",
+]
+
+[project.scripts]
+tts = "create2tts.cli:main"
+tts-mcp = "create2tts.mcp_server:main"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/create2tts"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["model: needs real model weights (slow)"]
+addopts = "-m 'not model'"
