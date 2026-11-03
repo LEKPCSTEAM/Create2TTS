@@ -24,7 +24,7 @@ def _default_engines() -> dict[str, EngineConfig]:
         "thonburian": EngineConfig(
             id="thonburian",
             language="th",
-            arch="F5TTS_Base",
+            arch="F5TTS_v1_Base",  # F5TTS_Base loads but outputs gibberish
             checkpoint="hf://biodatlab/ThonburianTTS/megaF5/mega_f5_last.safetensors",
             vocab_file="hf://biodatlab/ThonburianTTS/megaF5/mega_vocab.txt",
         ),
