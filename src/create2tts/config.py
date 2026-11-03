@@ -59,7 +59,7 @@ class Settings(BaseModel):
     default_voice: str | None = None
     default_preset: str = "neutral"
     asr_model: str = "openai/whisper-large-v3-turbo"
-    asr_model_th: str = "biodatlab/whisper-th-large-v3-combined"
+    asr_model_th: str = "biodatlab/whisper-th-medium-combined"
     presets: dict[str, Preset] = Field(default_factory=_default_presets)
 
 

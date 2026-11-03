@@ -7,7 +7,7 @@ Local, free Thai + English TTS with voice cloning, tone/softness control, a web 
 - Thai engine: ThonburianTTS megaF5 checkpoint loaded through `f5_tts.api.F5TTS(model="F5TTS_Base")` (the `thonburian-tts` wheel ships no code). English engine: `F5TTS_v1_Base` default checkpoint. Same adapter for both.
 - The engine is chosen by the **voice's language**, not the text. A Thai voice reads mixed text best-effort.
 - Device: `auto` → `mps` if available else `cpu`. Set `PYTORCH_ENABLE_MPS_FALLBACK=1`.
-- Reference transcription: HF `transformers` Whisper pipeline on the same device. Thai → `biodatlab/whisper-th-large-v3-combined`, English → `openai/whisper-large-v3-turbo`. Loaded per call, freed after.
+- Reference transcription: HF `transformers` Whisper pipeline on the same device. Thai → `biodatlab/whisper-th-medium-combined` (large-v3 variant selectable in settings), English → `openai/whisper-large-v3-turbo`. Loaded per call, freed after.
 - "Convert a recording" v1 = transcribe the recording, then synthesize the transcript with the chosen voice. True voice conversion (Seed-VC) is out of scope for v1.
 - Resource policy: nothing is resident until used. The worker starts on demand and exits after `idle_timeout_min` with no job and no open GUI tab.
 
